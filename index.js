@@ -31,9 +31,9 @@ app.get('/send', (req, res, next) => db.task(function* (db) {
 
   const name = req.query.name;
   
-  const c = yield db.sms.update();
+  const count = yield db.sms.update();
 
-  const text = `${name} поздравляем! Вы ${c.count} покупатель.`;
+  const text = `${name} поздравляем! Вы ${count} покупатель.`;
 
   yield smsSender(login, password, phone, text);
 
