@@ -31,11 +31,15 @@ app.get('/send', (req, res, next) => db.task(function* (db) {
 
   const name = req.query.name;
   
-  const count = yield db.sms.update();
+  const c = yield db.sms.update();
 
-  const text = `${name} поздравляем! Вы ${count} покупатель.`;
+  //console.log(count);
 
-  yield smsSender(login, password, phone, text);
+  const text = `${name} поздравляем! Вы ${c.count} покупатель.`;
+
+  const r = yield smsSender(login, password, phone, text);
+
+  
 
   //res.send('success');
   //res.send(req.get('Referrer') || req.get('Referer'));
