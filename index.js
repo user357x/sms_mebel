@@ -23,8 +23,6 @@ app.get('/', (req, res, next) => db.task(function* (db) {
 
 app.get('/send', (req, res, next) => db.task(function* (db) {
 
-  //console.log(req.get('Referrer') || req.get('Referer'));
-
   const login = req.query.login;
 
   const password = req.query.password;
