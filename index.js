@@ -15,7 +15,9 @@ app.set('view engine', 'ejs');
 
 app.get('/', (req, res, next) => db.task(function* (db) {
 
-  res.render("layout");
+  res.render("layout", {
+    block : 'form'
+  });
 
 }).catch(error => next(error)));
 
@@ -30,6 +32,8 @@ app.get('/send', (req, res, next) => db.task(function* (db) {
   const phone = req.query.phone;
 
   const name = req.query.name;
+
+  const order = req.query.order;
   
   const c = yield db.sms.update();
 
@@ -39,13 +43,27 @@ app.get('/send', (req, res, next) => db.task(function* (db) {
 
   const r = yield smsSender(login, password, phone, text);
 
+  yield db.order.insert(name, phone, order, c.count);
+
   //res.send('success');
-  
+
   //res.send(req.get('Referrer') || req.get('Referer'));
 
   res.redirect('back');
 
 }).catch(error => next(error)));
+
+app.get('/messages', (req, res, next) => db.task(function* (db) {
+
+  const orders = yield db.order.getAll();
+
+  res.render("layout", {
+    block : 'list',
+    orders : orders
+  });
+
+}).catch(error => next(error)));
+
 
 app.use(errorHandler);
 

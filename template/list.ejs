@@ -1,0 +1,38 @@
+<table border="1">
+	<tr>
+		<td>
+			#
+		</td>
+		<td>
+			Номер заказа
+		</td>
+		<td>
+			Имя
+		</td>
+		<td>
+			Телефон
+		</td>
+		<td>
+			Порядковый номер
+		</td>
+	</tr>
+	<% orders.forEach(function(order, i){ %>
+	<tr>
+		<td>
+			<%-i -%>
+		</td>
+		<td>
+			<%-order.orders -%>
+		</td>
+		<td>
+			<%-order.name -%>
+		</td>
+		<td>
+			<%-order.phone -%>
+		</td>
+		<td>
+			<%-order.count -%>
+		</td>
+	</tr>
+  	<% }); %>
+</table>

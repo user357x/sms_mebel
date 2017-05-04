@@ -7,7 +7,7 @@ module.exports = (login, password, phone, text) => request.get('https://sms.e-vo
     password : password,
     service : '24382',
     space_force : '1',
-    space : 'Magazin',
+    space : 'mche.ru',
     subno : phone,
     text : text
 });

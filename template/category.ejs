@@ -1,0 +1,38 @@
+<form 
+	action="/category" 
+	method="POST"
+	name="category-form">
+	<input 
+		type="hidden"
+		<% if (category) { %>
+			value="<%-category.id -%>"
+		<% } %>
+		name="id">
+	<label>Название</label>	
+	<input 
+		required 
+		type="text" 
+		placeholder="Название" 
+		<% if (category) { %>
+			value="<%-category.name -%>"
+		<% } %>
+		name="name">
+	<hr>
+	<label>Порядковый номер</label>
+	<input 
+		required
+		type="number" 
+		placeholder="Порядковый номер" 
+		value="<%-number -%>"
+		name="number">
+	<hr>
+	<label>Вопросы в случайном порядке</label>
+	<input
+		type="checkbox"
+		name="is_random"
+		<% if (category && category.is_random) { %>
+			checked
+		<% } %>
+		value="random">
+	<input type="submit" value="СОХРАНИТЬ">
+</form>
