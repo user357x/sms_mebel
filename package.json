@@ -17,7 +17,10 @@
     "express-session": "1.15.2",
     "connect-pg-simple": "latest",
     "crypto-js": "latest",
-    "winston": "latest"
+    "winston": "latest",
+    "superagent": "latest",
+    "ejs": "latest",
+    "ejs-locals": "latest"
   },
 
   "author": "vasily",
