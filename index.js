@@ -39,10 +39,10 @@ app.get('/send', (req, res, next) => db.task(function* (db) {
 
   const r = yield smsSender(login, password, phone, text);
 
-  
-
   //res.send('success');
+  
   //res.send(req.get('Referrer') || req.get('Referer'));
+
   res.redirect('back');
 
 }).catch(error => next(error)));
