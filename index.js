@@ -6,6 +6,7 @@ const app = express();
 const config = require(`${__dirname}/./config`);
 const errorHandler = require(`${__dirname}/./errorHandler`);
 const smsSender = require(`${__dirname}/./smsSender`)
+const getDate = require(`${__dirname}/./getDate`)
 
 global.db = require(`${__dirname}/./postgres`)(config.postgres);
 
@@ -32,6 +33,8 @@ app.get('/send', (req, res, next) => db.task(function* (db) {
   const name = req.query.name;
 
   const order = req.query.order;
+
+  const city = req.query.city;
   
   const c = yield db.sms.update();
 
@@ -41,7 +44,9 @@ app.get('/send', (req, res, next) => db.task(function* (db) {
 
   const r = yield smsSender(login, password, phone, text);
 
-  yield db.order.insert(name, phone, order, c.count);
+  
+
+  yield db.order.insert(name, phone, order, c.count, city);
 
   //res.send('success');
 
@@ -57,7 +62,7 @@ app.get('/messages', (req, res, next) => db.task(function* (db) {
 
   res.render("layout", {
     block : 'list',
-    orders : orders
+    orders : orders.map(order => Object.assign(order, { date : getDate(order.date) }))
   });
 
 }).catch(error => next(error)));

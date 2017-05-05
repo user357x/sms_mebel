@@ -10,10 +10,16 @@
 			Имя
 		</td>
 		<td>
+			Город
+		</td>
+		<td>
 			Телефон
 		</td>
 		<td>
 			Порядковый номер
+		</td>
+		<td>
+			Дата
 		</td>
 	</tr>
 	<% orders.forEach(function(order, i){ %>
@@ -28,10 +34,16 @@
 			<%-order.name -%>
 		</td>
 		<td>
+			<%-order.city -%>
+		</td>
+		<td>
 			<%-order.phone -%>
 		</td>
 		<td>
 			<%-order.count -%>
+		</td>
+		<td>
+			<%-order.date -%>
 		</td>
 	</tr>
   	<% }); %>
