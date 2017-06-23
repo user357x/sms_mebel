@@ -55,7 +55,7 @@ app.get('/send', (req, res, next) => db.task(function* (db) {
 
     yield db.order.insert(name, phone, order, result.count, percent, city);
 
-    const text = `${name} поздравляем! Вы ${result.count} покупатель. Доп. скидка ${percent} %`;
+    const text = `${name}, поздравляем! Вы ${result.count} покупатель. Доп. скидка ${percent} %`;
 
     const r = yield smsSender(login, password, phone, text);
 
