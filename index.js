@@ -59,7 +59,7 @@ app.get('/send', (req, res, next) => db.task(function* (db) {
 
     const r = yield smsSender(login, password, phone, text);
 
-    console.log(r);
+    console.log(r.text);
 
     res.redirect('back');
 
