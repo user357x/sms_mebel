@@ -5,8 +5,8 @@ const app = express();
 
 const config = require(`${__dirname}/./config`);
 const errorHandler = require(`${__dirname}/./errorHandler`);
-const smsSender = require(`${__dirname}/./smsSender`)
-const getDate = require(`${__dirname}/./getDate`)
+const smsSender = require(`${__dirname}/./smsSender`);
+const getDate = require(`${__dirname}/./getDate`);
 
 global.db = require(`${__dirname}/./postgres`)(config.postgres);
 

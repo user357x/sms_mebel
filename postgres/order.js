@@ -10,4 +10,4 @@ module.exports = db => {
         	`select * from public.orders order by id desc`
         )
 	};
-}
+};
