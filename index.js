@@ -43,15 +43,17 @@ app.get('/send', (req, res, next) => db.task(function* (db) {
 
     const check = yield db.sms.check();
 
-    let percent = getDiscount(check);
+    let percent;
+
+    if(check.count + 1 === 3000000)
+        percent = 50;
+    else
+        percent = getDiscount(check);
 
     if(!percent)
         res.redirect('back');
 
-    const result = yield db.sms.update(percent);
-
-    if(result.count === 3000000)
-        percent = 50;
+    let result = yield db.sms.update(percent);
 
     yield db.order.insert(name, phone, order, result.count, percent, city);
 
