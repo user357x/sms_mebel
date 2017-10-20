@@ -61,7 +61,7 @@ app.get('/send', (req, res, next) => db.task(function* (db) {
         res.redirect('back');*/
 
 
-    let result = yield db.items.setItem(name, city);
+    let result = yield db.items.setItem(name, phone, city);
 
     //yield db.order.insert(name, phone, order, result.count, percent, city);
 
