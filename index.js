@@ -21,8 +21,11 @@ app.use(bodyParser.urlencoded({ extended : false }));
 
 app.get('/', (req, res, next) => db.task(function* (db) {
 
+    const cities = yield db.city.getAll();
+
     res.render("layout", {
-        block : 'form'
+        block : 'form',
+        cities : cities
     });
 
 }).catch(next));
@@ -31,8 +34,8 @@ app.get('/', (req, res, next) => db.task(function* (db) {
 
 app.get('/send', (req, res, next) => db.task(function* (db) {
 
-    if(!req.query.name || !req.query.city || !req.query.phone) {
-        res.send(400);
+    if(!req.query.name || !req.query.city_id || !req.query.phone || !req.query.order) {
+        res.sendStatus(400);
         return;
     }
 
@@ -44,15 +47,17 @@ app.get('/send', (req, res, next) => db.task(function* (db) {
 
     const name = req.query.name;
 
-    const city = req.query.city;
+    const city_id = req.query.city_id;
 
-    //const order = req.query.order;
+    const order = req.query.order;
 
-    //const check = yield db.sms.check();
+    /*
 
-    //let percent;
+    const check = yield db.sms.check();
 
-    /*if(check.count + 1 === 3000000)
+    let percent;
+
+    if(check.count + 1 === 3000000)
         percent = 50;
     else
         percent = getDiscount(check);
@@ -61,20 +66,19 @@ app.get('/send', (req, res, next) => db.task(function* (db) {
         res.redirect('back');*/
 
 
-    let result = yield db.items.setItem(name, phone, city);
+    let result = yield db.items.setItem(name, phone, city_id, order);
 
-    //yield db.order.insert(name, phone, order, result.count, percent, city);
-
-    const text = `${result.name}, Поздравляем! Вам присвоен №${result.id + 1000}. г. ${result.city}.`;
+    const text = `${result.name}, Поздравляем! Вам присвоен №${result.id}. г. ${result.city}.`;
 
     const r = yield smsSender(login, password, phone, text);
 
-    if(r.text !== 'OK')
+    if(r.text !== 'OK') {
         yield db.items.deleteOnId(result.id);
-
-    console.log(r.text);
-
-    res.redirect('back');
+        res.send('Не корректный номер телефона!');
+    }
+    else {
+        res.send('Сообщение успешно отпралено!');
+    }
 
 }).catch(next));
 
@@ -82,13 +86,14 @@ app.get('/send', (req, res, next) => db.task(function* (db) {
 
 app.get('/messages', (req, res, next) => db.task(function* (db) {
 
-    const orders = yield db.items.getAll();
+    const items = yield db.items.getAll();
+
+    console.log(items)
 
     res.render("layout", {
         block : 'items',
-        orders : orders.map(order => Object.assign(order, {
-            date : getDate(order.date),
-            id : order.id + 1000
+        items : items.map(item => Object.assign(item, {
+            date : getDate(item.date)
         }))
     });
 

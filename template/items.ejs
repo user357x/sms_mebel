@@ -4,6 +4,9 @@
             #
         </td>
         <td>
+            Номер
+        </td>
+        <td>
             Номер заказа
         </td>
         <td>
@@ -19,25 +22,28 @@
             Дата
         </td>
     </tr>
-    <% orders.forEach(function(order, i){ %>
+    <% items.forEach(function(item, i){ %>
     <tr>
         <td>
             <%-i + 1 -%>
         </td>
         <td>
-            <%-order.id -%>
+            <%-item.id -%>
         </td>
         <td>
-            <%-order.name -%>
+            <%-item.order -%>
         </td>
         <td>
-            <%-order.city -%>
+            <%-item.name -%>
         </td>
         <td>
-            <%-order.phone -%>
+            <%-item.city -%>
         </td>
         <td>
-            <%-order.date -%>
+            <%-item.phone -%>
+        </td>
+        <td>
+            <%-item.date -%>
         </td>
     </tr>
     <% }); %>
