@@ -3,7 +3,7 @@
 module.exports = db => {
     return {
         setItem: (name, phone, city) => db.one(
-            `insert into public.items(name, city, phone) values($1, $2, $3) returning *`,
+            `insert into public.items(name, phone, city) values($1, $2, $3) returning *`,
             [name, phone, city]
         ),
         getAll: () => db.any(
