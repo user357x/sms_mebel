@@ -2,6 +2,7 @@
 
 const express = require('express');
 const app = express();
+const bodyParser = require(`body-parser`);
 
 const config = require(`${__dirname}/./config`);
 const errorHandler = require(`${__dirname}/./errorHandler`);
@@ -14,6 +15,7 @@ global.db = require(`${__dirname}/./postgres`)(config.postgres);
 app.engine('ejs', require('ejs-locals'));
 app.set('views', `${__dirname}/./template`);
 app.set('view engine', 'ejs');
+app.use(bodyParser.urlencoded({ extended : false }));
 
 
 
@@ -29,6 +31,11 @@ app.get('/', (req, res, next) => db.task(function* (db) {
 
 app.get('/send', (req, res, next) => db.task(function* (db) {
 
+    if(!req.query.name || !req.query.city || !req.query.phone) {
+        res.send(400);
+        return;
+    }
+
     const login = req.query.login;
 
     const password = req.query.password;
@@ -37,29 +44,33 @@ app.get('/send', (req, res, next) => db.task(function* (db) {
 
     const name = req.query.name;
 
-    const order = req.query.order;
-
     const city = req.query.city;
 
-    const check = yield db.sms.check();
+    //const order = req.query.order;
 
-    let percent;
+    //const check = yield db.sms.check();
 
-    if(check.count + 1 === 3000000)
+    //let percent;
+
+    /*if(check.count + 1 === 3000000)
         percent = 50;
     else
         percent = getDiscount(check);
 
     if(!percent)
-        res.redirect('back');
+        res.redirect('back');*/
 
-    let result = yield db.sms.update(percent);
 
-    yield db.order.insert(name, phone, order, result.count, percent, city);
+    let result = yield db.items.setItem(name, city);
 
-    const text = `${name}, поздравляем! Вы ${result.count} покупатель. Доп. скидка ${percent} %`;
+    //yield db.order.insert(name, phone, order, result.count, percent, city);
+
+    const text = `${result.name}, Поздравляем! Вам присвоен №${result.id}. г. ${result.city}.`;
 
     const r = yield smsSender(login, password, phone, text);
+
+    if(r.text !== 'OK')
+        yield db.items.deleteOnId(result.id);
 
     console.log(r.text);
 
@@ -71,10 +82,10 @@ app.get('/send', (req, res, next) => db.task(function* (db) {
 
 app.get('/messages', (req, res, next) => db.task(function* (db) {
 
-    const orders = yield db.order.getAll();
+    const orders = yield db.items.getAll();
 
     res.render("layout", {
-        block : 'list',
+        block : 'items',
         orders : orders.map(order => Object.assign(order, { date : getDate(order.date) }))
     });
 

@@ -13,6 +13,6 @@ const logger = new (winston.Logger)({
 });
 
 module.exports = (err, req, res, next) => {
-    console.error(err.stack)
+    console.error(err.stack);
     logger.log('error', err.stack);
 };
