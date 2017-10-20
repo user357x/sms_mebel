@@ -65,7 +65,7 @@ app.get('/send', (req, res, next) => db.task(function* (db) {
 
     //yield db.order.insert(name, phone, order, result.count, percent, city);
 
-    const text = `${result.name}, Поздравляем! Вам присвоен №${result.id}. г. ${result.city}.`;
+    const text = `${result.name}, Поздравляем! Вам присвоен №${result.id + 1000}. г. ${result.city}.`;
 
     const r = yield smsSender(login, password, phone, text);
 
@@ -86,7 +86,10 @@ app.get('/messages', (req, res, next) => db.task(function* (db) {
 
     res.render("layout", {
         block : 'items',
-        orders : orders.map(order => Object.assign(order, { date : getDate(order.date) }))
+        orders : orders.map(order => Object.assign(order, {
+            date : getDate(order.date),
+            id : order.id + 1000
+        }))
     });
 
 }).catch(next));
