@@ -1,4 +1,6 @@
-<table border="1">
+<% Object.keys(result).forEach(function(city, i){ %>
+<h1><%-city -%></h1>
+<table border="1" style="border-collapse: collapse">
     <tr>
         <td>
             #
@@ -22,7 +24,7 @@
             Дата
         </td>
     </tr>
-    <% items.forEach(function(item, i){ %>
+    <% result[city].forEach(function(item, i){ %>
     <tr>
         <td>
             <%-i + 1 -%>
@@ -48,3 +50,4 @@
     </tr>
     <% }); %>
 </table>
+<% }); %>

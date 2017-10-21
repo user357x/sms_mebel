@@ -8,10 +8,14 @@ module.exports = db => {
             [name, phone, city_id, order]
         ),
         getAll: () => db.any(
-            `select *, c.name as city, i.name as name, i.id + 1000 as id from public.items i
-             inner join public.city c on c.id = i.city_id
-             GROUP BY c.id, i.id
-             `
+            `select 
+                *,
+                c.name as city, 
+                i.name as name, 
+                i.id + 1000 as id, 
+                row_number() OVER (PARTITION BY c.id ORDER BY i.date DESC) AS rating_in_section
+                from public.items i
+                inner join public.city c on c.id = i.city_id`
         ),
         deleteOnId: (id) => db.none(
             `delete from public.items where id = $1`, [id]

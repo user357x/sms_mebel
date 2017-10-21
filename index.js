@@ -35,7 +35,10 @@ app.get('/', (req, res, next) => db.task(function* (db) {
 app.get('/send', (req, res, next) => db.task(function* (db) {
 
     if(!req.query.name || !req.query.city_id || !req.query.phone || !req.query.order) {
-        res.sendStatus(400);
+        res.send(
+            `<span style="color: red">Вы заполнили не все поля!</span><br>
+            <a href="/">Попробовать ещё раз</a>`
+        );
         return;
     }
 
@@ -43,11 +46,11 @@ app.get('/send', (req, res, next) => db.task(function* (db) {
 
     const password = req.query.password;
 
-    const phone = req.query.phone;
-
     const name = req.query.name;
 
     const city_id = req.query.city_id;
+
+    const phone = req.query.phone;
 
     const order = req.query.order;
 
@@ -68,16 +71,22 @@ app.get('/send', (req, res, next) => db.task(function* (db) {
 
     let result = yield db.items.setItem(name, phone, city_id, order);
 
-    const text = `${result.name}, Поздравляем! Вам присвоен №${result.id}. г. ${result.city}.`;
+    const text = `${result.name}, Поздравляем! Вам присвоен №${result.id}. г. ${result.city}. Номер заказа ${result.order}`;
 
     const r = yield smsSender(login, password, phone, text);
 
     if(r.text !== 'OK') {
         yield db.items.deleteOnId(result.id);
-        res.send('Не корректный номер телефона!');
+        res.send(
+            `<span style="color: red">Не корректный номер телефона!</span><br>
+            <a href="/">Попробовать ещё раз</a>`
+        );
     }
     else {
-        res.send('Сообщение успешно отпралено!');
+        res.send(
+            `<span style="color: green">Сообщение успешно отпралено!</span><br>
+            <a href="/">Назад</a>`
+        );
     }
 
 }).catch(next));
@@ -88,13 +97,35 @@ app.get('/messages', (req, res, next) => db.task(function* (db) {
 
     const items = yield db.items.getAll();
 
-    console.log(items)
+    //console.log(items)
+
+    let city = '';
+
+    const result = {};
+
+    items.forEach(item => {
+
+        if(city !== item.city) {
+
+            city = item.city;
+            result[city] = [];
+            result[city].push(item);
+
+        }
+        else {
+
+            result[city].push(item);
+
+        }
+
+
+    });
+
+    console.log(result);
 
     res.render("layout", {
         block : 'items',
-        items : items.map(item => Object.assign(item, {
-            date : getDate(item.date)
-        }))
+        result : result
     });
 
 }).catch(next));
