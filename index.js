@@ -68,10 +68,22 @@ app.get('/send', (req, res, next) => db.task(function* (db) {
     if(!percent)
         res.redirect('back');*/
 
+    const last = yield db.items.getLast(city_id);
 
-    let result = yield db.items.setItem(name, phone, city_id, order);
+    console.log(last);
 
-    const text = `${result.name}, Поздравляем! Вам присвоен №${result.id}. г. ${result.city}. Номер заказа ${result.order}`;
+    let num;
+
+    if(last.max) {
+        num = ++last.max;
+    }
+    else {
+        num = 1000;
+    }
+
+    const result = yield db.items.setItem(name, phone, city_id, order, num);
+
+    const text = `${result.name}, Поздравляем! Вам присвоен №${result.num}. г. ${result.city}. Номер заказа ${result.order}`;
 
     const r = yield smsSender(login, password, phone, text);
 
