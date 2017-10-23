@@ -74,16 +74,26 @@ app.get('/send', (req, res, next) => db.task(function* (db) {
 
     let num;
 
-    if(last.max) {
-        num = ++last.max;
+    if(last) {
+        num = ++last.num;
     }
     else {
         num = 1000;
     }
 
-    const result = yield db.items.setItem(name, phone, city_id, order, num);
+    let percent;
 
-    const text = `${result.name}, Поздравляем! Вам присвоен №${result.num}. г. ${result.city}. Номер заказа ${result.order}`;
+    if(num % 10 === 0) {
+        percent = 5;
+    }
+    else {
+        percent = (Math.floor(Math.random() * 2) === 0) ? 2 : 3;
+    }
+
+    const result = yield db.items.setItem(name, phone, city_id, order, num, percent);
+
+    //const text = `${result.name}, Поздравляем! Вам присвоен №${result.num}. г. ${result.city}. Ваша доп. скидка ${result.percent}`;
+    const text = `${result.name}, Поздравляем! Вам присвоен №${result.num}. г. ${result.city}. Ваша доп. скидка ${result.percent}`;
 
     const r = yield smsSender(login, password, phone, text);
 
@@ -96,7 +106,7 @@ app.get('/send', (req, res, next) => db.task(function* (db) {
     }
     else {
         res.send(
-            `<span style="color: green">Сообщение успешно отпралено!</span><br>
+            `<span style="color: green">Сообщение успешно отправлено!</span><br>
             <a href="/">Назад</a>`
         );
     }
