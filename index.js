@@ -104,11 +104,13 @@ app.get('/messages', (req, res, next) => db.task(function* (db) {
     const result = {};
 
     items.forEach(item => {
+        item.date = getDate(item.date);
 
         if(city !== item.city) {
 
             city = item.city;
             result[city] = [];
+
             result[city].push(item);
 
         }

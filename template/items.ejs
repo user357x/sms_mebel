@@ -1,33 +1,64 @@
+<style>
+    table{
+        width: 900px;
+    }
+    td{
+        padding: 5px;
+    }
+    .header td{
+        font-weight: bold;
+        text-align: center;
+    }
+    .num{
+        width: 5%;
+        text-align: center;
+    }
+    .date{
+        width: 19%;
+    }
+    .number{
+        width: 19%;
+    }
+    .order_number{
+        width: 19%;
+    }
+    .name{
+        width: 19%;
+    }
+    .phone{
+        width: 19%;
+    }
+</style>
 <% Object.keys(result).forEach(function(city, i){ %>
 <h1><%-city -%></h1>
 <table border="1" style="border-collapse: collapse">
-    <tr>
+    <tr class="header">
         <td>
             #
         </td>
-        <td>
+        <td class="date">
+            Дата
+        </td>
+        <td class="number">
             Номер
         </td>
-        <td>
+        <td class="order_number">
             Номер заказа
         </td>
-        <td>
+        <td class="name">
             Имя
         </td>
-        <td>
-            Город
-        </td>
-        <td>
+        <td class="phone">
             Телефон
-        </td>
-        <td>
-            Дата
         </td>
     </tr>
     <% result[city].forEach(function(item, i){ %>
     <tr>
-        <td>
+        <td class="num">
             <%-i + 1 -%>
+        </td>
+        <td>
+            <%-item.date -%>
         </td>
         <td>
             <%-item.id -%>
@@ -39,13 +70,7 @@
             <%-item.name -%>
         </td>
         <td>
-            <%-item.city -%>
-        </td>
-        <td>
             <%-item.phone -%>
-        </td>
-        <td>
-            <%-item.date -%>
         </td>
     </tr>
     <% }); %>
