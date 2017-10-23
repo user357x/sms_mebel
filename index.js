@@ -93,7 +93,7 @@ app.get('/send', (req, res, next) => db.task(function* (db) {
     const result = yield db.items.setItem(name, phone, city_id, order, num, percent);
 
     //const text = `${result.name}, Поздравляем! Вам присвоен №${result.num}. г. ${result.city}. Ваша доп. скидка ${result.percent}`;
-    const text = `${result.name}, Поздравляем! Вам присвоен №${result.num}. г. ${result.city}. Ваша доп. скидка ${result.percent}`;
+    const text = `${result.name}, Поздравляем! Вам присвоен №${result.num}. г. ${result.city}. Ваша доп. скидка ${result.percent}%`;
 
     const r = yield smsSender(login, password, phone, text);
 
