@@ -13,7 +13,7 @@ module.exports = db => {
                 c.name as city, 
                 i.name as name, 
                 i.id + 1000 as id, 
-                row_number() OVER (PARTITION BY c.id ORDER BY i.date DESC) AS rating_in_section
+                row_number() OVER (PARTITION BY c.id ORDER BY i.date) AS rating_in_section
                 from public.items i
                 inner join public.city c on c.id = i.city_id`
         ),
